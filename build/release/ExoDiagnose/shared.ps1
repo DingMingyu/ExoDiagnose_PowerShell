@@ -37,8 +37,7 @@ function Get-ExoConnection()
       }
       else
       {
-        Write-Host "Module ExchangeOnlineManagement not installed. Please install it from PowerShell Gallery, or use Basic Auth to connect EXO instead."
-        EXIT 1
+        throw "Module ExchangeOnlineManagement not installed. Please install it from PowerShell Gallery, or use Basic Auth to connect EXO instead."
       }
     }
     Connect-ExchangeOnline
