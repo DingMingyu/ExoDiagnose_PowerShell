@@ -29,9 +29,17 @@ function Get-ExoConnection()
 {
   if (!(Get-Command "Get-Mailbox*"))
   {
-    if (!(Get-Module ExchangeOnlineManagement))
+    if (!(Get-Module -Name ExchangeOnlineManagement))
     {
-      Import-Module ExchangeOnlineManagement
+      if (Get-Module -ListAvailable -Name ExchangeOnlineManagement)
+      {
+        Import-Module ExchangeOnlineManagement
+      }
+      else
+      {
+        Write-Host "Module ExchangeOnlineManagement not installed. Please install it from PowerShell Gallery, or use Basic Auth to connect EXO instead."
+        EXIT 1
+      }
     }
     Connect-ExchangeOnline
   }
@@ -48,7 +56,6 @@ function Write-Log($obj, [string]$path, [switch]$toConsole)
   {
     $null = New-Item -ItemType Directory -Path $folder
   }
-
   if ($obj.GetType() -eq [string])
   {    
     $text = $obj

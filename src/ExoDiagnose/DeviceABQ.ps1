@@ -126,7 +126,7 @@ function Get-AbqSettings
   {
     $text = "{0}: collecing ABQ settings for user {1}." -f (Get-Date).ToString("O"), $Mailbox
     Write-Log -obj $text -path $LogPath -toConsole
-
+    $LogPath = (Resolve-Path -Path $LogPath).Path
     Get-ExoConnection
     $cas = Get-Settings -source ([CASMailboxSource]::new($Mailbox)) -logPath $LogPath
     if (-not $cas)
@@ -134,13 +134,11 @@ function Get-AbqSettings
       $text = "The mailbox {0} is not found." -f $Mailbox
       Write-Log -obj $text -path $LogPath -toConsole
     }
-
     $null = Get-Settings -source ([MobileDeviceSource]::new($Mailbox)) -logPath $LogPath
     $null = Get-Settings -source ([MobileDeviceStatisticsSource]::new($Mailbox)) -logPath $LogPath
     $null = Get-Settings -source ([MobileDeviceMailboxPolicySource]::new()) -logPath $LogPath
     $null = Get-Settings -source ([AccessRuleSource]::new()) -logPath $LogPath
     $null = Get-Settings -source ([OrganizationSettingsSource]::new()) -logPath $LogPath
-    
-    Write-Log -obj "ABQ settings successfully collected." -path $LogPath -toConsole
+    Write-Log -obj "ABQ settings successfully collected and stored at $LogPath." -path $LogPath -toConsole
   }
 }
